@@ -3,21 +3,24 @@
 #include "types.h"
 #include "str.h"
 
-u64 strLen(char* str) {
+size_t strLen(const char* str) {
 	if (!str) return 0;
 
+	size_t len = 0;
 	for (int i = 0; i < MAX_STRING_LENGTH; i++) {
 		if (str[i] == '\0') {
-			return i;
+			return len;
 		}
+		len++;
 	}
 
 	return MAX_STRING_LENGTH;
 }
-u64 strIndexOf(char* str, char ch) {
+s64 strIndexOf(const char* str, const char ch) {
 	if (!str) return 0;
 	
-	for (int i = 0; i < strLen(str); i++) {
+	s64 len = strLen(str);
+	for (s64 i = 0; i < len; i++) {
 		if (str[i] == ch) {
 			return i;
 		}
@@ -25,10 +28,12 @@ u64 strIndexOf(char* str, char ch) {
 	return -1;
 }
 
-u8 strIsNumber(char* str) {
+s8 strIsNumber(const char* str) {
 	if (!str) return 0;
+	if (str[0] == '-' && str[1] == '\0') return 0;
 
-	for (int i = 0; i < strLen(str); i++) {
+	s64 len = strLen(str);
+	for (int i = 0; i < len; i++) {
 		if ((char)str[i] == '-' && i == 0) {
 			 continue;
 		}
@@ -38,50 +43,36 @@ u8 strIsNumber(char* str) {
 	}
 	return 1;
 }
-u8 strContains(char* str, char ch) {
-	int index = strIndexOf(str, ch);
-	if (index == -1) {
-		return 0;
-	}
-	else {
-		return 1;
-	}
+s8 strContains(const char* str, const char ch) {
+	return strIndexOf(str, ch) != -1;
 }
-u8 strMatches(char* strA, char* strB) {
+s8 strMatches(const char* strA, const char* strB) {
 	if (!strA || !strB) return 0;
-
-	int len1 = strLen(strA);
-	int len2 = strLen(strB);
+	
+	s64 len1 = strLen(strA);
+	s64 len2 = strLen(strB);
 
 	if (len1 != len2) return 0;
 
-	for (int i = 0; i < len1; i++) {
+	for (s64 i = 0; i < len1; i++) {
 		if (strA[i] != strB[i]) return 0;
 	}
 	return 1;
 }
 
-char* strConcat_M(char* strA, char* strB) {
+char* strConcatAlloc(const char* strA, const char* strB) {
 	if (strA && strB) {
-		int len1 = strLen(strA);
-		int len2 = strLen(strB);
+		s64 len1 = strLen(strA);
+		s64 len2 = strLen(strB);
 		char* newStr = malloc(sizeof(char) * (len1 + len2 + 1));
-		for (int i = 0; i < len1; i++) {
-			if (strA[i] != '\0') {
-				newStr[i] = strA[i];
-			}
+		for (s64 i = 0; i < len1; i++) {
+			newStr[i] = strA[i];
 		}
-		for (int a = 0; a < len2; a++) {
-			if (strB[a] != '\0') {
-				newStr[a + len1] = strB[a];
-			}
+		for (s64 a = 0; a < len2; a++) {
+			newStr[a + len1] = strB[a];
 		}
 		newStr[len1 + len2] = '\0';
 		return newStr;
 	}
-}
-
-void freeStr(char* str) {
-	str = NULL;
-	free(str);
+	return NULL;
 }

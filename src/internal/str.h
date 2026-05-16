@@ -1,19 +1,20 @@
-#ifndef STR_H
+\#ifndef STR_H
 #define STR_H
 
 #define MAX_STRING_LENGTH 1024
 
 #include "types.h"
 
-u64 strLen(char* str);
-u64 strIndexOf(char* str, char ch);
+// To do:
+//	Add safe and unsafe string calls
 
-u8 strIsNumber(char* str);
-u8 strContains(char* str, char ch);
-u8 strMatches(char* strA, char* strB);
+s64 strLen(const char* str);
+s64 strIndexOf(const char* str, const char ch);
 
-char* strConcat_M(char* strA, char* strB);
+s8 strIsNumber(const char* str);
+s8 strContains(const char* str, const char ch);
+s8 strMatches(const char* strA, const char* strB);
 
-void freeStr(char* str);
+char* strConcatAlloc(const char* strA, const char* strB);
 
 #endif
