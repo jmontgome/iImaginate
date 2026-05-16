@@ -92,5 +92,6 @@ int main(int argc, char *argv[]) {
 
 		shutdown();
 	}
+	printf("Shutting Down...\n");
 	return 0;
 }

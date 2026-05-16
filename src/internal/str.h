@@ -1,4 +1,4 @@
-\#ifndef STR_H
+#ifndef STR_H
 #define STR_H
 
 #define MAX_STRING_LENGTH 1024
@@ -8,7 +8,8 @@
 // To do:
 //	Add safe and unsafe string calls
 
-s64 strLen(const char* str);
+size_t strLen(const char* str);
+
 s64 strIndexOf(const char* str, const char ch);
 
 s8 strIsNumber(const char* str);
