@@ -3,7 +3,7 @@
 
 #define MAX_STRING_LENGTH 1024
 
-#include "types.h"
+#include "../global.h"
 
 // To do:
 //	Add safe and unsafe string calls

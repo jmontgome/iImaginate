@@ -1,20 +1,30 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <unistd.h>
-#include <stdio.h>
 
 #include "global.h"
-#include "internal/types.h"
-#include "internal/str.h"
+#include "input.h"
+#include "sys/sys.h"
 
 Display *display;
 Window window;
+
+void setup(int argc, char *argv[]) {
+	for (int i = 0; i < argc; i++) {
+		if (strMatches(argv[i], "debug") == 1 ||
+			strMatches(argv[i], "--debug") == 1) {
+			setDebugMode(1);
+			printf("Debug Mode ON!\n");
+		}
+		
+	}
+}
 
 int createWindow() {
 	display = XOpenDisplay(NULL);
 	
 	if (display == NULL)
-		return -1;
+		return 1;
 
 	int screen = DefaultScreen(display);
 	
@@ -45,7 +55,12 @@ void mainLoop() {
 
 	while (1) {
 		XNextEvent(display, &event);
+		
+		processInput(event);
 
+		if (shutdownQueued()) {
+			break;
+		}
 		/*
 		Exit logic is as follows:
 		-Wait for exit command
@@ -66,36 +81,21 @@ void cleanup() {
 }
 
 void shutdown() {
-
+	printf("Shutting Down...\n");
 }
 
 int main(int argc, char *argv[]) {
-	int debug = 0;
-
-	for (int i = 0; i < argc; i++) {
-		if (strMatches(argv[i], "debug") == 1 || 
-			strMatches(argv[i], "--debug") == 1) {
-			setDebugMode(1);
-			printf("Debug Mode ON!\n");
-		}
-		
-	}
+	setup(argc, argv);
 	
-	if (DEBUG == 0) {
-		int windowCreated = createWindow();
-		if (windowCreated == 1) {
-			return -1;
-		}
-		
-		mainLoop();
-	
-		cleanup();
-
-		shutdown();
+	int windowCreated = createWindow();
+	if (windowCreated == -1) {
+		return -1;
 	}
 	else {
-		printf("Running in debug mode!\n");
+		mainLoop();
 	}
-	printf("Shutting Down...\n");
+	
+	cleanup();
+	shutdown();
 	return 0;
 }

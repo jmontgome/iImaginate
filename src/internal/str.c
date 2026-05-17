@@ -1,7 +1,4 @@
-#include <stdlib.h>
-
-#include "types.h"
-#include "str.h"
+#include "../global.h"
 
 size_t strLen(const char* str) {
 	if (!str) return 0;
