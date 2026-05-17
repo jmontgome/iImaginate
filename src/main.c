@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
+#include "global.h"
 #include "internal/types.h"
 #include "internal/str.h"
 
@@ -74,13 +75,13 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < argc; i++) {
 		if (strMatches(argv[i], "debug") == 1 || 
 			strMatches(argv[i], "--debug") == 1) {
+			setDebugMode(1);
 			printf("Debug Mode ON!\n");
-			debug = 1;
 		}
 		
 	}
 	
-	if (debug == 0) {
+	if (DEBUG == 0) {
 		int windowCreated = createWindow();
 		if (windowCreated == 1) {
 			return -1;
@@ -91,6 +92,9 @@ int main(int argc, char *argv[]) {
 		cleanup();
 
 		shutdown();
+	}
+	else {
+		printf("Running in debug mode!\n");
 	}
 	printf("Shutting Down...\n");
 	return 0;
