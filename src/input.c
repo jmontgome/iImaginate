@@ -3,9 +3,8 @@
 
 #include "global.h"
 #include "input.h"
-#include "sys/sys.h"
 
-void processInput(XEvent event) {
+void processInput(XEvent event, AppState *appState) {
 	if (event.type == KeyPress || 
 		event.type == KeyRelease) {
 		KeySym key = XLookupKeysym(&event.xkey, 0);
@@ -15,7 +14,7 @@ void processInput(XEvent event) {
 		}
 		else {
 			if (key == XK_Escape) {
-				queueShutdown();
+				appState->shutdownReady = 1;
 			}
 		}
 	}
