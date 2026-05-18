@@ -75,12 +75,12 @@ void mainLoop() {
 	}
 }
 
-void cleanup() {
+void appCleanup() {
 	XDestroyWindow(display, window);
 	XCloseDisplay(display);
 }
 
-void shutdown() {
+void appShutdown() {
 	printf("Shutting Down...\n");
 }
 
@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
 		mainLoop();
 	}
 	
-	cleanup();
-	shutdown();
+	appCleanup();
+	appShutdown();
 	return 0;
 }
