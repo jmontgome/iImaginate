@@ -22,8 +22,11 @@ typedef struct {
 	s16 mouseX;
 	s16 mouseY;
 
+	GC gc;
+
 	RuntimeMode runMode;
 
+	s16 screen;
 	Display *display;
 	Window window;
 

@@ -4,7 +4,7 @@
 #include "global.h"
 #include "input.h"
 
-void processInput(XEvent event, AppState *appState) {
+void input_processInput(XEvent event, AppState *appState) {
 	if (event.type == KeyPress || 
 		event.type == KeyRelease) {
 		KeySym key = XLookupKeysym(&event.xkey, 0);

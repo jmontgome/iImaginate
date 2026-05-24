@@ -8,7 +8,7 @@
 
 AppState appState;
 
-void setup(int argc, char *argv[]) {
+void main_setup(int argc, char *argv[]) {
 	for (int i = 0; i < argc; i++) {
 		if (strMatches(argv[i], "debug") == 1 ||
 			strMatches(argv[i], "--debug") == 1) {
@@ -19,46 +19,16 @@ void setup(int argc, char *argv[]) {
 	}
 }
 
-int createWindow() {
-	appState.display = XOpenDisplay(NULL);
-	
-	if (appState.display == NULL)
-		return 1;
-
-	int screen = DefaultScreen(appState.display);
-	
-	appState.window = XCreateSimpleWindow(
-		appState.display,
-		RootWindow(appState.display, screen),
-		10, 10,
-		800, 600,
-		1,
-		BlackPixel(appState.display, screen),
-		WhitePixel(appState.display, screen)
-	);
-
-	XSelectInput(appState.display, appState.window, ExposureMask |
-		KeyPressMask |
-		KeyReleaseMask |
-		ButtonPressMask |
-		ButtonReleaseMask |
-		PointerMotionMask |
-		StructureNotifyMask );
-	XMapWindow(appState.display, appState.window);
-
-	return 0;
-}
-
-void mainLoop() {
+void main_mainLoop() {
 	XEvent event;
 
 	while (1) {
 		XNextEvent(appState.display, &event);
+
+		input_processInput(event, &appState);
 		
 		gfx_clear(&appState);
 		gfx_render(&appState);
-
-		processInput(event, &appState);
 
 		if (appState.shutdownReady) break;
 		/*
@@ -75,27 +45,27 @@ void mainLoop() {
 	}
 }
 
-void appCleanup() {
+void main_appCleanup() {
 	XDestroyWindow(appState.display, appState.window);
 	XCloseDisplay(appState.display);
 }
 
-void appShutdown() {
+void main_appShutdown() {
 	printf("Shutting Down...\n");
 }
 
 int main(int argc, char *argv[]) {
-	setup(argc, argv);
+	main_setup(argc, argv);
 	
-	int windowCreated = createWindow();
+	int windowCreated = gfx_createWindow(&appState);
 	if (windowCreated == -1) {
 		return -1;
 	}
 	else {
-		mainLoop();
+		main_mainLoop();
 	}
 	
-	appCleanup();
-	appShutdown();
+	main_appCleanup();
+	main_appShutdown();
 	return 0;
 }
