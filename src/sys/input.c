@@ -25,6 +25,14 @@ void input_processInput(XEvent event, AppState *appState) {
 					appState->shutdownReady = 1;
 				}
 			}
+			if (key == XK_2) {
+				appState->stageWasChanged = 1;
+				appState->uiStage = GAME_LIBRARY;
+			}
+			if (key == XK_1) {
+				appState->stageWasChanged = 1;
+				appState->uiStage = HOME;
+			}
 		}
 	}
 }

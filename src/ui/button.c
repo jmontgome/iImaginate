@@ -1,9 +1,6 @@
 #include "button.h"
 
-Button* ui_createButton(Display *display,
-	Window window,
-	GC gc,
-	s16 x,
+Button* ui_createButton(s16 x,
 	s16 y,
 	s16 z,
 	s16 width,

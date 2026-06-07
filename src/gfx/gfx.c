@@ -12,7 +12,7 @@ UIElements uiElements;
 
 s16 gfx_createWindow() {
 	display = XOpenDisplay(NULL);
-	
+
 	if (display == NULL) {
 		return 1;
 	}
@@ -40,6 +40,7 @@ s16 gfx_createWindow() {
 	
 	gc = XCreateGC(display, window, 0, NULL);
 
+	XSetForeground(display, gc, BlackPixel(display, screen));
 	return 0;
 }
 
@@ -48,35 +49,49 @@ void gfx_nextWindowEvent(XEvent *event) {
 }
 
 void gfx_render(AppState *appState) {
+	//Create objects for new screen
 	if (appState->stageWasChanged == 1) {
 		appState->stageWasChanged = 0;
-		
+		//Clean current UI Elements
+		gfx_clear();
+
+		//Figure out what stage we're on and make its UI elements
 		if (appState->uiStage == HOME) {
 			printf("Home screen...\r\n");
-			Button *button = ui_createButton(display,
-				window, gc, 20, 20, 1, 150, 40, "Test Button");
+			Button *button = ui_createButton(20, 20, 1, 150, 40, "Welcome!");
 
-			XDrawRectangle(display, window, gc, button->x,
-				button->y, button->width, button-> height);
-
-			XDrawString(display, window, gc, button->x + 10,
-				button->y + (button->height / 2) + 5,
-				button->textLabel, strLen(button->textLabel));
+			uiElements.buttons[0] = button;
+			uiElements.buttonCount = 1;
 		}
+
+		if (appState-> uiStage == GAME_LIBRARY) {
+			printf("Game library...\r\n");
+			Button *button = ui_createButton(20, 20, 1, 150, 40, "Play a Game!");
+
+			uiElements.buttons[0] = button;
+			uiElements.buttonCount = 1;
+		}
+	}
+
+	//Render the objects needed.
+	for (int i = 0; i < uiElements.buttonCount; i++) {
+		if (uiElements.buttons[i] == NULL) {
+			printf("Button No %d appears to be null or corrupted...", i);
+			continue;
+		}
+		Button *button = uiElements.buttons[i];
+		XDrawRectangle(display, window, gc,
+			button->x, button->y, button->width,
+			button->height);
+		XDrawString(display, window, gc,
+			button->x + 10, button->y + (button->height / 2) + 5,
+			button->textLabel, strLen(button->textLabel));
 	}
 }
 
 void gfx_clear() {
-	XSetForeground(display, gc, WhitePixel(display,
-		screen));
-
-	XFillRectangle(
-		display,
-		window,
-		gc,
-		0, 0,
-		WINDOW_WIDTH, WINDOW_HEIGHT
-	);
+	ui_clearUiElements(&uiElements);
+	XClearWindow(display, window);
 }
 
 void gfx_cleanupAndDestroy() {
