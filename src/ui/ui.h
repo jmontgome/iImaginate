@@ -3,4 +3,13 @@
 
 #include "button.h"
 
+typedef enum {
+	HOME = 0,
+	GAME_LIBRARY = 1
+} UIStage;
+
+typedef struct {
+	Button buttons[128];
+} UIElements;
+
 #endif

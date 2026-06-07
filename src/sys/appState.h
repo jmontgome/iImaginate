@@ -3,7 +3,6 @@
 
 #include <X11/Xlib.h>
 
-
 #include "../global.h"
 #include "../ui/ui.h"
 
@@ -13,24 +12,14 @@ typedef enum {
 } RuntimeMode;
 
 typedef struct {
-	Button buttons[128];
-} UIElements;
-
-typedef struct {
 	s8 shutdownReady;
-
-	s16 mouseX;
-	s16 mouseY;
-
-	GC gc;
 
 	RuntimeMode runMode;
 
-	s16 screen;
-	Display *display;
-	Window window;
-
-	UIElements uiElements;
+	s8 stageWasChanged;
+	UIStage uiStage;
 } AppState;
+
+void appState_changeUiStage(AppState *appState, UIStage stage);
 
 #endif

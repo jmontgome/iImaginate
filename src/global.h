@@ -6,6 +6,5 @@
 
 #include "internal/types.h"
 #include "internal/str.h"
-#include "sys/appState.h"
 
 #endif

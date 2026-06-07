@@ -5,6 +5,7 @@
 #include "gfx/gfx.h"
 #include "global.h"
 #include "input.h"
+#include "sys/appState.h"
 
 AppState appState;
 
@@ -15,19 +16,18 @@ void main_setup(int argc, char *argv[]) {
 			appState.runMode = DEBUG;
 			printf("Debug Mode ON!\n");
 		}
-		
 	}
+
+	appState_changeUiStage(&appState, HOME);
 }
 
 void main_mainLoop() {
 	XEvent event;
 
 	while (1) {
-		XNextEvent(appState.display, &event);
+		gfx_nextWindowEvent(&event);
 
 		input_processInput(event, &appState);
-		
-		gfx_clear(&appState);
 		gfx_render(&appState);
 
 		if (appState.shutdownReady) break;
@@ -45,11 +45,6 @@ void main_mainLoop() {
 	}
 }
 
-void main_appCleanup() {
-	XDestroyWindow(appState.display, appState.window);
-	XCloseDisplay(appState.display);
-}
-
 void main_appShutdown() {
 	printf("Shutting Down...\n");
 }
@@ -65,7 +60,7 @@ int main(int argc, char *argv[]) {
 		main_mainLoop();
 	}
 	
-	main_appCleanup();
+	gfx_cleanupAndDestroy();
 	main_appShutdown();
 	return 0;
 }
