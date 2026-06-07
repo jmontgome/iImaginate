@@ -1,8 +1,8 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
-#include "global.h"
-#include "sys/appState.h"
+#include "../global.h"
+#include "../sys/appState.h"
 #include "input.h"
 
 void input_processInput(XEvent event, AppState *appState) {

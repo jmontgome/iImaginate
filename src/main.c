@@ -4,7 +4,7 @@
 
 #include "gfx/gfx.h"
 #include "global.h"
-#include "input.h"
+#include "sys/input.h"
 #include "sys/appState.h"
 
 AppState appState;
