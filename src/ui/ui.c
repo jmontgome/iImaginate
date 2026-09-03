@@ -5,5 +5,7 @@
 void ui_clearUiElements(UIElements *ui) {
 	for (int i = 0; i < ui->buttonCount; i++) {
 		free(ui->buttons[i]);
+		ui->buttons[i] = NULL;
 	}
+	ui->buttonCount = 0;
 }

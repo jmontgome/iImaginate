@@ -10,7 +10,7 @@ Window window;
 
 UIElements uiElements;
 
-s16 gfx_createWindow() {
+u16 gfx_createWindow() {
 	display = XOpenDisplay(NULL);
 
 	if (display == NULL) {
@@ -71,27 +71,32 @@ void gfx_render(AppState *appState) {
 			uiElements.buttons[0] = button;
 			uiElements.buttonCount = 1;
 		}
+
+		appState->needsRepaint = 1;
 	}
 
 	//Render the objects needed.
-	for (int i = 0; i < uiElements.buttonCount; i++) {
-		if (uiElements.buttons[i] == NULL) {
+	if (appState->needsRepaint == 1) {
+		appState->needsRepaint = 0;
+		XClearWindow(display, window);
+
+		for (int i = 0; i < uiElements.buttonCount; i++) {
 			printf("Button No %d appears to be null or corrupted...", i);
 			continue;
 		}
+
 		Button *button = uiElements.buttons[i];
 		XDrawRectangle(display, window, gc,
 			button->x, button->y, button->width,
 			button->height);
 		XDrawString(display, window, gc,
-			button->x + 10, button->y + (button->height / 2) + 5,
+			button->x + 10, button->y + (button-> height / 2) + 5,
 			button->textLabel, strLen(button->textLabel));
 	}
 }
 
 void gfx_clear() {
 	ui_clearUiElements(&uiElements);
-	XClearWindow(display, window);
 }
 
 void gfx_cleanupAndDestroy() {

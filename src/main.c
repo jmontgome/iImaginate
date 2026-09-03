@@ -27,7 +27,7 @@ void main_mainLoop() {
 	while (1) {
 		gfx_nextWindowEvent(&event);
 
-		input_processInput(event, &appState);
+		input_processEvent(event, &appState);
 		gfx_render(&appState);
 
 		if (appState.shutdownReady) break;
@@ -53,8 +53,8 @@ int main(int argc, char *argv[]) {
 	main_setup(argc, argv);
 	
 	int windowCreated = gfx_createWindow(&appState);
-	if (windowCreated == -1) {
-		return -1;
+	if (windowCreated == 1) {
+		return 1;
 	}
 	else {
 		main_mainLoop();

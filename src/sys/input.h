@@ -3,6 +3,6 @@
 
 #include "../global.h"
 
-void input_processInput(XEvent event, AppState *appState);
+void input_processEvent(XEvent event, AppState *appState);
 
 #endif

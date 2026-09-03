@@ -17,6 +17,7 @@ typedef struct {
 	RuntimeMode runMode;
 
 	s8 stageWasChanged;
+	s8 needsRepaint;
 	UIStage uiStage;
 } AppState;
 

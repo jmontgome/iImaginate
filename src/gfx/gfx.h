@@ -8,7 +8,7 @@
 #include "../sys/appState.h"
 #include "../ui/ui.h"
 
-s16 gfx_createWindow();
+u16 gfx_createWindow();
 
 void gfx_nextWindowEvent(XEvent *event);
 void gfx_render(AppState *appState);
