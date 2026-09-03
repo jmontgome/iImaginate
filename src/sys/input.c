@@ -6,20 +6,20 @@
 #include "input.h"
 
 void input_processEvent(XEvent event, AppState *appState) {
+	if (event.type == Expose) {
+		appState->needsRepaint = 1;
+	}
+	if (event.type == ConfigureNotify) {
+		appState->needsRepaint = 1;
+	}
+
 	if (event.type == KeyPress ||
 		event.type == KeyRelease) {
 		KeySym key = XLookupKeysym(&event.xkey, 0);
-
-		if (event.type == Expose) {
-			appState->needsRepaint = 1;
-		}
-		if (event.type == ConfigureNotify) {
-			appState->needsRepaint = 1;
-		}
 		if (event.type == KeyPress) {
-			
+
 		}
-		if (event.type == KeRelease) {
+		else {
 			if (key == XK_Escape) {
 				if (appState->runMode == DEBUG) {
 					appState->shutdownReady = 1;

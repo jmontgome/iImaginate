@@ -81,17 +81,19 @@ void gfx_render(AppState *appState) {
 		XClearWindow(display, window);
 
 		for (int i = 0; i < uiElements.buttonCount; i++) {
-			printf("Button No %d appears to be null or corrupted...", i);
-			continue;
-		}
+			if (uiElements.buttons[i] == NULL) {
+				printf("Button No %d appears to be null or corrupted...", i);
+				continue;
+			}
 
-		Button *button = uiElements.buttons[i];
-		XDrawRectangle(display, window, gc,
-			button->x, button->y, button->width,
-			button->height);
-		XDrawString(display, window, gc,
-			button->x + 10, button->y + (button-> height / 2) + 5,
-			button->textLabel, strLen(button->textLabel));
+			Button *button = uiElements.buttons[i];
+			XDrawRectangle(display, window, gc,
+				button->x, button->y, button->width,
+				button->height);
+			XDrawString(display, window, gc,
+				button->x + 10, button->y + (button-> height / 2) + 5,
+				button->textLabel, strLen(button->textLabel));
+		}
 	}
 }
 
