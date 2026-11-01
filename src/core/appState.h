@@ -1,8 +1,6 @@
 #ifndef APPSTATE_H
 #define APPSTATE_H
 
-#include <X11/Xlib.h>
-
 #include "../global.h"
 #include "../ui/ui.h"
 

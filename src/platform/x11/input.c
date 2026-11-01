@@ -2,8 +2,8 @@
 #include <X11/keysym.h>
 
 #include "../global.h"
-#include "../sys/appState.h"
-#include "input.h"
+#include "../core/appState.h"
+#include "../input.h"
 
 void input_processEvent(XEvent event, AppState *appState) {
 	if (event.type == Expose) {

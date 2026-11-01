@@ -2,10 +2,10 @@
 #include <X11/Xutil.h>
 #include <unistd.h>
 
-#include "gfx/gfx.h"
+#include "platform/gfx.h"
 #include "global.h"
-#include "sys/input.h"
-#include "sys/appState.h"
+#include "platform/input.h"
+#include "core/appState.h"
 
 AppState appState;
 

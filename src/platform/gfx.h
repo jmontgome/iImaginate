@@ -5,7 +5,7 @@
 #include <X11/Xutil.h>
 
 #include "../global.h"
-#include "../sys/appState.h"
+#include "../core/appState.h"
 #include "../ui/ui.h"
 
 u16 gfx_createWindow();

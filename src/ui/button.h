@@ -1,9 +1,6 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-
 #include "../global.h"
 
 typedef struct {
