@@ -8,8 +8,6 @@ s16 screen;
 Display* display;
 Window window;
 
-UIElements uiElements;
-
 u16 gfx_createWindow() {
 	display = XOpenDisplay(NULL);
 
@@ -53,23 +51,23 @@ void gfx_render(AppState *appState) {
 	if (appState->stageWasChanged == 1) {
 		appState->stageWasChanged = 0;
 		//Clean current UI Elements
-		gfx_clear();
+		ui_clearUiElements(&appState->uiElements);
 
 		//Figure out what stage we're on and make its UI elements
 		if (appState->uiStage == HOME) {
 			printf("Home screen...\r\n");
 			Button *button = ui_createButton(20, 20, 1, 150, 40, "Welcome!");
 
-			uiElements.buttons[0] = button;
-			uiElements.buttonCount = 1;
+			appState->uiElements.buttons[0] = button;
+			appState->uiElements.buttonCount = 1;
 		}
 
 		if (appState-> uiStage == GAME_LIBRARY) {
 			printf("Game library...\r\n");
 			Button *button = ui_createButton(20, 20, 1, 150, 40, "Play a Game!");
 
-			uiElements.buttons[0] = button;
-			uiElements.buttonCount = 1;
+			appState->uiElements.buttons[0] = button;
+			appState->uiElements.buttonCount = 1;
 		}
 
 		appState->needsRepaint = 1;
@@ -80,13 +78,13 @@ void gfx_render(AppState *appState) {
 		appState->needsRepaint = 0;
 		XClearWindow(display, window);
 
-		for (int i = 0; i < uiElements.buttonCount; i++) {
-			if (uiElements.buttons[i] == NULL) {
+		for (int i = 0; i < appState->uiElements.buttonCount; i++) {
+			if (appState->uiElements.buttons[i] == NULL) {
 				printf("Button No %d appears to be null or corrupted...", i);
 				continue;
 			}
 
-			Button *button = uiElements.buttons[i];
+			Button *button = appState->uiElements.buttons[i];
 			XDrawRectangle(display, window, gc,
 				button->x, button->y, button->width,
 				button->height);
@@ -95,10 +93,6 @@ void gfx_render(AppState *appState) {
 				button->textLabel, strLen(button->textLabel));
 		}
 	}
-}
-
-void gfx_clear() {
-	ui_clearUiElements(&uiElements);
 }
 
 void gfx_cleanupAndDestroy() {

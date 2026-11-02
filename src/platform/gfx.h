@@ -12,7 +12,6 @@ u16 gfx_createWindow();
 
 void gfx_nextWindowEvent(XEvent *event);
 void gfx_render(AppState *appState);
-void gfx_clear();
 
 void gfx_cleanupAndDestroy();
 

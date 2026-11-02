@@ -17,6 +17,7 @@ typedef struct {
 	s8 stageWasChanged;
 	s8 needsRepaint;
 	UIStage uiStage;
+	UIElements uiElements;
 } AppState;
 
 void appState_changeUiStage(AppState *appState, UIStage stage);

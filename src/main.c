@@ -2,10 +2,14 @@
 #include <X11/Xutil.h>
 #include <unistd.h>
 
-#include "platform/gfx.h"
 #include "global.h"
+#include "platform/gfx.h"
 #include "platform/input.h"
 #include "core/appState.h"
+#include "ui/ui.h"
+
+#define FAILURE_EXIT_CODE 1
+#define CLEAN_EXIT_CODE 0
 
 AppState appState;
 
@@ -45,22 +49,21 @@ void main_mainLoop() {
 	}
 }
 
-void main_appShutdown() {
+void main_appCleanupAndShutdown() {
 	printf("Shutting Down...\n");
+	ui_clearUiElements(&appState.uiElements);
+	gfx_cleanupAndDestroy();
 }
 
 int main(int argc, char *argv[]) {
 	main_setup(argc, argv);
 	
-	int windowCreated = gfx_createWindow(&appState);
+	int windowCreated = gfx_createWindow();
 	if (windowCreated == 1) {
-		return 1;
+		return FAILURE_EXIT_CODE;
 	}
-	else {
-		main_mainLoop();
-	}
+	main_mainLoop();
 	
-	gfx_cleanupAndDestroy();
-	main_appShutdown();
-	return 0;
+	main_appCleanupAndShutdown();
+	return CLEAN_EXIT_CODE;
 }
