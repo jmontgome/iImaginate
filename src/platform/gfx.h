@@ -1,18 +1,15 @@
 #ifndef GFX_H
 #define GFX_H
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-
 #include "../global.h"
 #include "../core/appState.h"
-#include "../ui/ui.h"
+#include "platform.h"
 
 u16 gfx_createWindow();
 
-void gfx_nextWindowEvent(XEvent *event);
-void gfx_render(AppState *appState);
+void gfx_nextWindowEvent(PlatformEvent *event);
+void gfx_render(Platform *platform, AppState *appState);
 
-void gfx_cleanupAndDestroy();
+void gfx_cleanupAndDestroy(Platform *platform);
 
 #endif

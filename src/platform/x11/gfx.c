@@ -35,7 +35,7 @@ u16 gfx_createWindow() {
 		PointerMotionMask |
 		StructureNotifyMask );
 	XMapWindow(display, window);
-	
+
 	gc = XCreateGC(display, window, 0, NULL);
 
 	XSetForeground(display, gc, BlackPixel(display, screen));

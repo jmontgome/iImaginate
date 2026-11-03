@@ -5,6 +5,10 @@
 #include "../core/appState.h"
 #include "../input.h"
 
+static PlatformKey platformKey_FromX11(KeySym keysym) {
+	
+}
+
 void input_processEvent(XEvent event, AppState *appState) {
 	if (event.type == Expose) {
 		appState->needsRepaint = 1;
