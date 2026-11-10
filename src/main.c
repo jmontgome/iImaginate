@@ -15,7 +15,7 @@ void main_setup(int argc, char *argv[]) {
 		if (strMatches(argv[i], "debug") == 1 ||
 			strMatches(argv[i], "--debug") == 1) {
 			appState.runMode = RUNTIME_DEBUG;
-			printf("Debug Mode ON!\n");
+			printf("Runtime Debug Mode ON!\n");
 		}
 	}
 
@@ -52,12 +52,15 @@ void main_appCleanupAndShutdown(Platform *platform) {
 }
 
 int main(int argc, char *argv[]) {
+#if DEBUG
+	printf("Debug Build\n");
+#endif
 	appState_init(&appState);
 	main_setup(argc, argv);
 
 	Platform *platform = platform_create();
 	if (platform == NULL) {
-		printf("Failed to initialize Platform\r\n");
+		printf("Failed to initialize Platform\n");
 		return FAILURE_EXIT_CODE;
 	}
 

@@ -51,7 +51,7 @@ void gfx_render(Platform *platform, AppState *appState,
 
 		//Figure out what stage we're on and make its UI elements
 		if (appState->uiStage == HOME) {
-			printf("Home screen...\r\n");
+			printf("Home screen...\n");
 			Button *button = ui_createButton(20, 20, 1, 150, 40, "Welcome!");
 
 			appState->uiElements.buttons[0] = button;
@@ -59,7 +59,7 @@ void gfx_render(Platform *platform, AppState *appState,
 		}
 
 		if (appState-> uiStage == GAME_LIBRARY) {
-			printf("Game library...\r\n");
+			printf("Game library...\n");
 			Button *button = ui_createButton(20, 20, 1, 150, 40, "Play a Game!");
 
 			appState->uiElements.buttons[0] = button;

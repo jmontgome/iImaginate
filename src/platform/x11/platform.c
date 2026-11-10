@@ -5,7 +5,7 @@ Platform *platform_create(void) {
     Platform *platform = malloc(sizeof(Platform));
     u16 ret = gfx_createWindow(platform);
     if (ret != 0) {
-        printf("Failed to initialize Window\r\n");
+        printf("Failed to initialize Window\n");
         return NULL;
     }
 

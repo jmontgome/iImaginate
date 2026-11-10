@@ -44,7 +44,7 @@ BIN := bin/iImaginate
 # ---- Default target: debug build --------------------------
 
 .PHONY: all
-all: CFLAGS  += $(SAN)
+all: CFLAGS  += $(SAN) -DDEBUG
 all: LDFLAGS += $(SAN)
 all: $(BIN)
 
