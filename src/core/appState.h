@@ -5,8 +5,8 @@
 #include "../ui/ui.h"
 
 typedef enum {
-	DEBUG = 0,
-	RELEASE = 1
+	RUNTIME_DEBUG = 0,
+	RUNTIME_STANDARD = 1
 } RuntimeMode;
 
 typedef struct {
@@ -18,6 +18,8 @@ typedef struct {
 	UIStage uiStage;
 	UIElements uiElements;
 } AppState;
+
+void appState_init(AppState *appState);
 
 void appState_changeUiStage(AppState *appState, UIStage stage);
 
