@@ -1,53 +1,49 @@
 #include "../gfx.h"
+#include "platformInternal.h"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
-GC gc;
-s16 screen;
-Display* display;
-Window window;
+u16 gfx_createWindow(Platform *platform) {
+	platform->display = XOpenDisplay(NULL);
 
-u16 gfx_createWindow() {
-	display = XOpenDisplay(NULL);
-
-	if (display == NULL) {
+	if (platform->display == NULL) {
 		return 1;
 	}
 
-	screen = DefaultScreen(display);
+	platform->screen = DefaultScreen(platform->display);
 
-	window = XCreateSimpleWindow(
-		display,
-		RootWindow(display, screen),
+	platform->window = XCreateSimpleWindow(
+		platform->display,
+		RootWindow(platform->display, platform->screen),
 		10, 10,
 		WINDOW_WIDTH, WINDOW_HEIGHT,
 		1,
-		BlackPixel(display, screen),
-		WhitePixel(display, screen)
+		BlackPixel(platform->display, platform->screen),
+		WhitePixel(platform->display, platform->screen)
 	);
 
-	XSelectInput(display, window, ExposureMask |
+	XSelectInput(platform->display, platform->window, ExposureMask |
 		KeyPressMask |
 		KeyReleaseMask |
 		ButtonPressMask |
 		ButtonReleaseMask |
 		PointerMotionMask |
 		StructureNotifyMask );
-	XMapWindow(display, window);
+	XMapWindow(platform->display, platform->window);
 
-	gc = XCreateGC(display, window, 0, NULL);
+	platform->gc = XCreateGC(platform->display, platform->window, 0, NULL);
 
-	XSetForeground(display, gc, BlackPixel(display, screen));
+	XSetForeground(platform->display, platform->gc, 
+		BlackPixel(platform->display, platform->screen));
 	return 0;
 }
 
-void gfx_nextWindowEvent(XEvent *event) {
-	XNextEvent(display, event);
-}
-
-void gfx_render(AppState *appState) {
+void gfx_render(Platform *platform, AppState *appState,
+	PlatformEvent event) {
 	//Create objects for new screen
+
+	u16 internalRedraw = 0;
 	if (appState->stageWasChanged == 1) {
 		appState->stageWasChanged = 0;
 		//Clean current UI Elements
@@ -69,14 +65,13 @@ void gfx_render(AppState *appState) {
 			appState->uiElements.buttons[0] = button;
 			appState->uiElements.buttonCount = 1;
 		}
-
-		appState->needsRepaint = 1;
+		internalRedraw = 1;
 	}
 
 	//Render the objects needed.
-	if (appState->needsRepaint == 1) {
-		appState->needsRepaint = 0;
-		XClearWindow(display, window);
+	if (event.type == PLATFORM_EVENT_REDRAW_NEEDED ||
+		internalRedraw == 1) {
+		XClearWindow(platform->display, platform->window);
 
 		for (int i = 0; i < appState->uiElements.buttonCount; i++) {
 			if (appState->uiElements.buttons[i] == NULL) {
@@ -85,17 +80,18 @@ void gfx_render(AppState *appState) {
 			}
 
 			Button *button = appState->uiElements.buttons[i];
-			XDrawRectangle(display, window, gc,
+			XDrawRectangle(platform->display, platform->window, 
+				platform->gc,
 				button->x, button->y, button->width,
 				button->height);
-			XDrawString(display, window, gc,
+			XDrawString(platform->display, platform->window, platform->gc,
 				button->x + 10, button->y + (button-> height / 2) + 5,
 				button->textLabel, strLen(button->textLabel));
 		}
 	}
 }
 
-void gfx_cleanupAndDestroy() {
-	XDestroyWindow(display, window);
-	XCloseDisplay(display);
+void gfx_cleanupAndDestroy(Platform *platform) {
+	XDestroyWindow(platform->display, platform->window);
+	XCloseDisplay(platform->display);
 }

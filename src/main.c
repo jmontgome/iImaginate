@@ -1,10 +1,8 @@
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <unistd.h>
-
 #include "global.h"
 #include "platform/gfx.h"
-#include "platform/input.h"
+#include "platform/inputWrapper.h"
+#include "platform/platform.h"
+#include "platform/sysInput.h"
 #include "core/appState.h"
 #include "ui/ui.h"
 
@@ -25,14 +23,13 @@ void main_setup(int argc, char *argv[]) {
 	appState_changeUiStage(&appState, HOME);
 }
 
-void main_mainLoop() {
-	XEvent event;
+void main_mainLoop(Platform *platform) {
+	PlatformEvent event;
 
 	while (1) {
-		gfx_nextWindowEvent(&event);
-
-		input_processEvent(event, &appState);
-		gfx_render(&appState);
+		event = sysInput_pollEvent(platform);
+		inputWrapper_processEvent(event, &appState);
+		gfx_render(platform, &appState, event);
 
 		if (appState.shutdownReady) break;
 		/*
@@ -49,21 +46,22 @@ void main_mainLoop() {
 	}
 }
 
-void main_appCleanupAndShutdown() {
+void main_appCleanupAndShutdown(Platform *platform) {
 	printf("Shutting Down...\n");
 	ui_clearUiElements(&appState.uiElements);
-	gfx_cleanupAndDestroy();
+	platform_destroy(platform);
 }
 
 int main(int argc, char *argv[]) {
 	main_setup(argc, argv);
-	
-	int windowCreated = gfx_createWindow();
-	if (windowCreated == 1) {
+	Platform *platform = platform_create();
+	if (platform == NULL) {
+		printf("Failed to initialize Platform\r\n");
 		return FAILURE_EXIT_CODE;
 	}
-	main_mainLoop();
+
+	main_mainLoop(platform);
 	
-	main_appCleanupAndShutdown();
+	main_appCleanupAndShutdown(platform);
 	return CLEAN_EXIT_CODE;
 }

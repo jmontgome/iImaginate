@@ -5,10 +5,10 @@
 #include "../core/appState.h"
 #include "platform.h"
 
-u16 gfx_createWindow();
+u16 gfx_createWindow(Platform *platform);
 
-void gfx_nextWindowEvent(PlatformEvent *event);
-void gfx_render(Platform *platform, AppState *appState);
+void gfx_render(Platform *platform, AppState *appState,
+    PlatformEvent event);
 
 void gfx_cleanupAndDestroy(Platform *platform);
 
